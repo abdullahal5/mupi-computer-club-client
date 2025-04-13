@@ -62,6 +62,8 @@ const AddExecutives = ({ onClose }: { onClose: () => void }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const toastId = toast.loading("Loading");
+
     const target = e.target as any;
 
     const profileImage = image || "N/A";
@@ -80,7 +82,9 @@ const AddExecutives = ({ onClose }: { onClose: () => void }) => {
       const match = session.match(regex);
 
       if (!match) {
-        toast.error("Please enter a valid session in the format YYYY-YYYY.");
+        toast.error("Please enter a valid session in the format YYYY-YYYY.", {
+          id: toastId,
+        });
         return;
       }
 
@@ -89,7 +93,10 @@ const AddExecutives = ({ onClose }: { onClose: () => void }) => {
 
       if (end - start !== 1) {
         toast.error(
-          "The year difference must be exactly one when adding a session."
+          "The year difference must be exactly one when adding a session.",
+          {
+            id: toastId,
+          }
         );
         return;
       }
@@ -102,7 +109,7 @@ const AddExecutives = ({ onClose }: { onClose: () => void }) => {
       contact,
       role,
       session,
-      communitySession: role === "advisor" ? communitySession : "N/A",
+      communitySession: role === "advisor" ? "N/A" : communitySession,
       roleType,
       facebook,
       linkedin,
@@ -112,12 +119,14 @@ const AddExecutives = ({ onClose }: { onClose: () => void }) => {
     if (res.error) {
       toast.error(res.error.data.message, {
         duration: 2000,
+        id: toastId,
       });
 
       onClose();
     } else {
       toast.success(res.data.message, {
         duration: 2000,
+        id: toastId,
       });
       onClose();
 

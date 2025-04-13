@@ -69,7 +69,7 @@ const AddArticles = ({ onClose }: { onClose: () => void }) => {
   const [image, setImages] = useState<string>();
   const [value, setValue] = useState("");
   const [addArticle] = useAddArticleMutation();
-  const router = useNavigate()
+  const router = useNavigate();
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -107,6 +107,8 @@ const AddArticles = ({ onClose }: { onClose: () => void }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const toastId = toast.loading("Loading");
+
     const target = e.target as any;
 
     const title = target.title.value;
@@ -124,12 +126,14 @@ const AddArticles = ({ onClose }: { onClose: () => void }) => {
     if (res.error) {
       toast.error(res.error.data.message, {
         duration: 2000,
+        id: toastId,
       });
 
       onClose();
     } else {
       toast.success(res.data.message, {
         duration: 2000,
+        id: toastId,
       });
       onClose();
 
@@ -240,10 +244,7 @@ const AddArticles = ({ onClose }: { onClose: () => void }) => {
 
         {/* Description */}
         <div>
-          <label
-            htmlFor="description"
-            className="block text-sm font-medium"
-          >
+          <label htmlFor="description" className="block text-sm font-medium">
             Description
           </label>
           <ReactQuill

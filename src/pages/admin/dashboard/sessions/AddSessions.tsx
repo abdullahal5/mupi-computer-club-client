@@ -76,6 +76,8 @@ const AddSessions = ({ onClose }: { onClose: () => void }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const toastId = toast.loading("Loading");
+
     const target = e.target as any;
 
     const title = target.title.value;
@@ -125,12 +127,14 @@ const AddSessions = ({ onClose }: { onClose: () => void }) => {
     if (res.error) {
       toast.error(res.error.data.message, {
         duration: 2000,
+        id: toastId,
       });
 
       onClose();
     } else {
       toast.success(res.data.message, {
         duration: 2000,
+        id: toastId,
       });
       onClose();
 
@@ -140,227 +144,255 @@ const AddSessions = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <form
-  onSubmit={handleSubmit}
-  className="max-w-4xl mx-auto shadow-md rounded-lg p-4 md:p-6 space-y-4 md:space-y-6"
->
-  <h2 className="text-2xl md:text-4xl font-bold text-white mb-4 md:mb-6">Add New Session</h2>
-
-  <div className="space-y-3 md:space-y-4">
-    <div className="flex flex-col md:flex-row gap-3 md:gap-4">
-      <div className="flex-1">
-        <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-          Session Title
-        </label>
-        <input
-          type="text"
-          id="title"
-          placeholder="This is a new session"
-          name="title"
-          className="mt-1 p-2 md:p-3 block w-full rounded-md shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
-          required
-        />
-      </div>
-      <div className="flex-1">
-        <label htmlFor="instructorName" className="block text-sm font-medium text-gray-700">
-          Instructor Name
-        </label>
-        <input
-          type="text"
-          id="instructorName"
-          placeholder="himel vai"
-          name="instructorName"
-          className="mt-1 p-2 md:p-3 block w-full rounded-md shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
-          required
-        />
-      </div>
-    </div>
-
-    <div>
-      <label className="block text-sm font-medium text-gray-700">
-        Session Images
-      </label>
-      <div className="flex flex-wrap gap-2 md:gap-4">
-        {images?.map((image, index) => (
-          <div key={index} className="relative w-16 h-16 md:w-24 md:h-24">
-            <img
-              src={image}
-              alt={`Preview ${index}`}
-              className="w-full h-full object-cover rounded-md"
-            />
-            <button
-              type="button"
-              onClick={() => setImages(images.filter((_, i) => i !== index))}
-              className="absolute top-0 right-0 p-0.5 md:p-1 bg-red-500 text-white rounded-full text-xs md:text-base"
-            >
-              <FaTrash />
-            </button>
-          </div>
-        ))}
-        <label
-          htmlFor="image-upload"
-          className="flex items-center justify-center w-16 h-16 md:w-24 md:h-24 border-2 border-dashed border-gray-300 rounded-md cursor-pointer bg-white/15 hover:bg-white/25 transition"
-        >
-          <FaCloudUploadAlt className="text-xl md:text-2xl text-[#000030]" />
-          <input
-            type="file"
-            id="image-upload"
-            accept="image/*"
-            multiple
-            onChange={handleFileChange}
-            className="hidden"
-          />
-        </label>
-      </div>
-    </div>
-
-    <select
-      id="status"
-      name="status"
-      className="mt-1 p-2 md:p-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
-      required
+      onSubmit={handleSubmit}
+      className="max-w-4xl mx-auto shadow-md rounded-lg p-4 md:p-6 space-y-4 md:space-y-6"
     >
-      <option className="text-black" value="upcoming">
-        Upcoming
-      </option>
-      <option className="text-black" value="past">
-        Past Activities
-      </option>
-    </select>
+      <h2 className="text-2xl md:text-4xl font-bold text-white mb-4 md:mb-6">
+        Add New Session
+      </h2>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-      <div>
-        <label htmlFor="date" className="block text-sm font-medium text-gray-700">
-          Date
-        </label>
-        <input
-          type="date"
-          id="date"
-          name="date"
-          className="mt-1 p-2 md:p-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
-          required
-        />
-      </div>
-
-      <div>
-        <label htmlFor="start-time" className="block text-sm font-medium text-gray-700">
-          Start Time
-        </label>
-        <input
-          type="time"
-          id="start-time"
-          name="startTime"
-          className="mt-1 p-2 md:p-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
-          required
-        />
-      </div>
-    </div>
-    
-    <div className="flex flex-col md:flex-row gap-3 md:gap-4">
-      <div className="flex-1">
-        <label htmlFor="end-time" className="block text-sm font-medium text-gray-700">
-          End Time
-        </label>
-        <input
-          type="time"
-          id="end-time"
-          name="endTime"
-          className="mt-1 p-2 md:p-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
-          required
-        />
-      </div>
-
-      <div className="flex-1">
-        <label htmlFor="location" className="block text-sm font-medium text-gray-700">
-          Location
-        </label>
-        <input
-          type="text"
-          id="location"
-          placeholder="Dhaka, Bangladesh"
-          name="location"
-          className="mt-1 p-2 md:p-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
-          required
-        />
-      </div>
-    </div>
-
-    <div>
-      <label htmlFor="sessionLink" className="block text-sm font-medium text-gray-700">
-        Session Link
-      </label>
-      <input
-        type="url"
-        id="sessionLink"
-        placeholder="https://example.com"
-        name="sessionLink"
-        className="mt-1 p-2 md:p-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
-        required
-      />
-    </div>
-
-    <div>
-      <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-        Description
-      </label>
-      <textarea
-        id="description"
-        name="description"
-        placeholder="Tell us more about this session."
-        rows={4}
-        className="mt-1 p-2 md:p-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
-        required
-      ></textarea>
-    </div>
-
-    <div>
-      <label className="block text-sm font-medium text-gray-700">
-        Eligibility Criteria
-      </label>
-      {eligibilityCriteria.map((criterion, index) => (
-        <div key={index} className="flex items-center mt-2">
-          <input
-            type="text"
-            value={criterion}
-            onChange={(e) =>
-              handleFieldChange(
-                index,
-                e.target.value,
-                setEligibilityCriteria
-              )
-            }
-            className="flex-grow rounded-md border-gray-300 shadow-sm focus:border-[#000030] p-2 md:p-3 focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
-            placeholder="Eligibility criterion"
-          />
-          {index > 0 && (
-            <button
-              type="button"
-              onClick={() => removeField(index, setEligibilityCriteria)}
-              className="ml-2 p-1 md:p-2 text-red-500 hover:text-red-700"
+      <div className="space-y-3 md:space-y-4">
+        <div className="flex flex-col md:flex-row gap-3 md:gap-4">
+          <div className="flex-1">
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-700"
             >
-              <FaTrash />
-            </button>
-          )}
+              Session Title
+            </label>
+            <input
+              type="text"
+              id="title"
+              placeholder="This is a new session"
+              name="title"
+              className="mt-1 p-2 md:p-3 block w-full rounded-md shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
+              required
+            />
+          </div>
+          <div className="flex-1">
+            <label
+              htmlFor="instructorName"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Instructor Name
+            </label>
+            <input
+              type="text"
+              id="instructorName"
+              placeholder="himel vai"
+              name="instructorName"
+              className="mt-1 p-2 md:p-3 block w-full rounded-md shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
+              required
+            />
+          </div>
         </div>
-      ))}
-      <button
-        type="button"
-        onClick={() => addField(setEligibilityCriteria)}
-        className="mt-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-[#000030] hover:bg-[#000050] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#000030]"
-      >
-        <FaPlus className="mr-2" /> Add Criterion
-      </button>
-    </div>
 
-    <div className="text-right mt-3 md:mt-4">
-      <button
-        type="submit"
-        className="px-4 py-2 md:px-6 md:py-3 w-full border hover:border-[#000030] bg-[#000030] text-white rounded-md hover:bg-[#000050] transition-all"
-      >
-        Submit Session
-      </button>
-    </div>
-  </div>
-</form>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Session Images
+          </label>
+          <div className="flex flex-wrap gap-2 md:gap-4">
+            {images?.map((image, index) => (
+              <div key={index} className="relative w-16 h-16 md:w-24 md:h-24">
+                <img
+                  src={image}
+                  alt={`Preview ${index}`}
+                  className="w-full h-full object-cover rounded-md"
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setImages(images.filter((_, i) => i !== index))
+                  }
+                  className="absolute top-0 right-0 p-0.5 md:p-1 bg-red-500 text-white rounded-full text-xs md:text-base"
+                >
+                  <FaTrash />
+                </button>
+              </div>
+            ))}
+            <label
+              htmlFor="image-upload"
+              className="flex items-center justify-center w-16 h-16 md:w-24 md:h-24 border-2 border-dashed border-gray-300 rounded-md cursor-pointer bg-white/15 hover:bg-white/25 transition"
+            >
+              <FaCloudUploadAlt className="text-xl md:text-2xl text-[#000030]" />
+              <input
+                type="file"
+                id="image-upload"
+                accept="image/*"
+                multiple
+                onChange={handleFileChange}
+                className="hidden"
+              />
+            </label>
+          </div>
+        </div>
+
+        <select
+          id="status"
+          name="status"
+          className="mt-1 p-2 md:p-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
+          required
+        >
+          <option className="text-black" value="upcoming">
+            Upcoming
+          </option>
+          <option className="text-black" value="past">
+            Past Activities
+          </option>
+        </select>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+          <div>
+            <label
+              htmlFor="date"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Date
+            </label>
+            <input
+              type="date"
+              id="date"
+              name="date"
+              className="mt-1 p-2 md:p-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
+              required
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="start-time"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Start Time
+            </label>
+            <input
+              type="time"
+              id="start-time"
+              name="startTime"
+              className="mt-1 p-2 md:p-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
+              required
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col md:flex-row gap-3 md:gap-4">
+          <div className="flex-1">
+            <label
+              htmlFor="end-time"
+              className="block text-sm font-medium text-gray-700"
+            >
+              End Time
+            </label>
+            <input
+              type="time"
+              id="end-time"
+              name="endTime"
+              className="mt-1 p-2 md:p-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
+              required
+            />
+          </div>
+
+          <div className="flex-1">
+            <label
+              htmlFor="location"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Location
+            </label>
+            <input
+              type="text"
+              id="location"
+              placeholder="Dhaka, Bangladesh"
+              name="location"
+              className="mt-1 p-2 md:p-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
+              required
+            />
+          </div>
+        </div>
+
+        <div>
+          <label
+            htmlFor="sessionLink"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Session Link
+          </label>
+          <input
+            type="url"
+            id="sessionLink"
+            placeholder="https://example.com"
+            name="sessionLink"
+            className="mt-1 p-2 md:p-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
+            required
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="description"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Description
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            placeholder="Tell us more about this session."
+            rows={4}
+            className="mt-1 p-2 md:p-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
+            required
+          ></textarea>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Eligibility Criteria
+          </label>
+          {eligibilityCriteria.map((criterion, index) => (
+            <div key={index} className="flex items-center mt-2">
+              <input
+                type="text"
+                value={criterion}
+                onChange={(e) =>
+                  handleFieldChange(
+                    index,
+                    e.target.value,
+                    setEligibilityCriteria
+                  )
+                }
+                className="flex-grow rounded-md border-gray-300 shadow-sm focus:border-[#000030] p-2 md:p-3 focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
+                placeholder="Eligibility criterion"
+              />
+              {index > 0 && (
+                <button
+                  type="button"
+                  onClick={() => removeField(index, setEligibilityCriteria)}
+                  className="ml-2 p-1 md:p-2 text-red-500 hover:text-red-700"
+                >
+                  <FaTrash />
+                </button>
+              )}
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addField(setEligibilityCriteria)}
+            className="mt-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-[#000030] hover:bg-[#000050] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#000030]"
+          >
+            <FaPlus className="mr-2" /> Add Criterion
+          </button>
+        </div>
+
+        <div className="text-right mt-3 md:mt-4">
+          <button
+            type="submit"
+            className="px-4 py-2 md:px-6 md:py-3 w-full border hover:border-[#000030] bg-[#000030] text-white rounded-md hover:bg-[#000050] transition-all"
+          >
+            Submit Session
+          </button>
+        </div>
+      </div>
+    </form>
   );
 };
 

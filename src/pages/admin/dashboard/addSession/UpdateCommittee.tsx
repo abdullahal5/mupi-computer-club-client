@@ -24,6 +24,9 @@ const UpdateCommittee = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+        const toastId = toast.loading("Loading");
+
+
     const target = e.target as any;
 
     const year = target.session.value;
@@ -32,7 +35,9 @@ const UpdateCommittee = ({
     const match = year.match(regex);
 
     if (!match) {
-      toast.error("Please enter a valid session in the format YYYY-YYYY.");
+      toast.error("Please enter a valid session in the format YYYY-YYYY.", {
+        id: toastId,
+      });
       return;
     }
 
@@ -40,7 +45,9 @@ const UpdateCommittee = ({
     const end = parseInt(match[2]);
 
     if (end - start !== 1) {
-      toast.error("The year difference must be exactly one.");
+      toast.error("The year difference must be exactly one.", {
+        id: toastId,
+      });
       return;
     }
 
@@ -52,12 +59,14 @@ const UpdateCommittee = ({
     if (res.error) {
       toast.error(res.error.data.message, {
         duration: 2000,
+        id: toastId,
       });
 
       onClose();
     } else {
       toast.success(res.data.message, {
         duration: 2000,
+        id: toastId,
       });
       onClose();
 

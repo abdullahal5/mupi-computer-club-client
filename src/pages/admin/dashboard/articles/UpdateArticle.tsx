@@ -116,6 +116,8 @@ const UpdateArticle = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const toastId = toast.loading("Loading");
+
     const target = e.target as any;
 
     const title = target.title.value;
@@ -136,12 +138,14 @@ const UpdateArticle = ({
     if (res.error) {
       toast.error(res.error.data.message, {
         duration: 2000,
+        id: toastId,
       });
 
       onClose();
     } else {
       toast.success(res.data.message, {
         duration: 2000,
+        id: toastId,
       });
       onClose();
 
