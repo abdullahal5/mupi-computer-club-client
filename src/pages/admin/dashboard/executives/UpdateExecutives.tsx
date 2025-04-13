@@ -20,7 +20,11 @@ const UpdateExecutives = ({
   onClose: () => void;
   id: string;
 }) => {
-  const { data: getSingleExecutiveInfo, isLoading, isFetching } = useGetSingleExecutiveQuery(id, {
+  const {
+    data: getSingleExecutiveInfo,
+    isLoading,
+    isFetching,
+  } = useGetSingleExecutiveQuery(id, {
     skip: !id,
   });
 
@@ -90,33 +94,36 @@ const UpdateExecutives = ({
 
     const target = e.target as any;
 
-    const session = target.session.value;
+    const profileImage = image || "N/A";
+    const name = target.name.value || "N/A";
+    const email = target.email.value || "N/A";
+    const contact = target.contact.value || "N/A";
+    const roleType = target.roleType.value || "N/A";
+    const role = target.role.value || "N/A";
+    const session = target?.session?.value || "N/A";
+    const facebook = target.facebook.value || "N/A";
+    const linkedin = target.linkedin.value || "N/A";
+    const twitter = target.twitter.value || "N/A";
 
-    const regex = /^(\d{4})-(\d{4})$/;
-    const match = session.match(regex);
+    if (role !== "advisor") {
+      const regex = /^(\d{4})-(\d{4})$/;
+      const match = session.match(regex);
 
-    if (!match) {
-      toast.error("Please enter a valid session in the format YYYY-YYYY.");
-      return;
+      if (!match) {
+        toast.error("Please enter a valid session in the format YYYY-YYYY.");
+        return;
+      }
+
+      const start = parseInt(match[1]);
+      const end = parseInt(match[2]);
+
+      if (end - start !== 1) {
+        toast.error(
+          "The year difference must be exactly one when adding a session."
+        );
+        return;
+      }
     }
-
-    const start = parseInt(match[1]);
-    const end = parseInt(match[2]);
-
-    if (end - start !== 1) {
-      toast.error("The year difference must be exactly one when add session.");
-      return;
-    }
-
-    const profileImage = image;
-    const name = target.name.value;
-    const email = target.email.value;
-    const contact = target.contact.value;
-    const roleType = target.roleType.value;
-    const role = target.role.value;
-    const facebook = target.facebook.value;
-    const linkedin = target.linkedin.value;
-    const twitter = target.twitter.value;
 
     const res = (await updateExecutives({
       id: id,
@@ -127,7 +134,7 @@ const UpdateExecutives = ({
         contact,
         role,
         session,
-        communitySession,
+        communitySession: role === "advisor" ? communitySession : "N/A",
         roleType,
         position: roleType === "developer" ? position : "N/A",
         facebook,
@@ -256,50 +263,54 @@ const UpdateExecutives = ({
             </div>
 
             <div className="flex flex-col md:flex-row gap-6">
-              <div className="w-full md:w-1/3">
-                <label
-                  htmlFor="roll"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Session
-                </label>
-                <input
-                  type="text"
-                  id="session"
-                  placeholder="Enter session"
-                  defaultValue={getsingleExecutiveData?.session}
-                  name="session"
-                  className="mt-1 p-3 block w-full rounded-md focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
-                />
-              </div>
-              <div className="w-full md:w-1/3">
-                <label
-                  htmlFor="Committee's"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Committee's
-                </label>
-                <select
-                  id="communitySession"
-                  name="communitySession"
-                  value={communitySession}
-                  onChange={handleSessionChange}
-                  className="mt-1 p-3 block w-full rounded-md focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
-                >
-                  <option value="" disabled>
-                    Select a Committee
-                  </option>
-                  {getAllCommICommitteeData?.map((sessionItem) => (
-                    <option
-                      className="text-black"
-                      key={sessionItem?._id}
-                      value={sessionItem?.year}
+              {roleType !== "advisor" && (
+                <>
+                  <div className="w-full md:w-1/3">
+                    <label
+                      htmlFor="roll"
+                      className="block text-sm font-medium text-gray-700 mb-1"
                     >
-                      {sessionItem?.year}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                      Session
+                    </label>
+                    <input
+                      type="text"
+                      id="session"
+                      placeholder="Enter session"
+                      name="session"
+                      className="mt-1 p-3 block w-full rounded-md focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
+                    />
+                  </div>
+
+                  <div className="w-full md:w-1/3">
+                    <label
+                      htmlFor="Committee's"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      Committee's
+                    </label>
+                    <select
+                      id="communitySession"
+                      name="communitySession"
+                      value={communitySession}
+                      onChange={handleSessionChange}
+                      className="mt-1 p-3 block w-full rounded-md focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
+                    >
+                      <option value="" disabled>
+                        Select a Committee
+                      </option>
+                      {getAllCommICommitteeData?.map((sessionItem) => (
+                        <option
+                          className="text-black"
+                          key={sessionItem?._id}
+                          value={sessionItem?.year}
+                        >
+                          {sessionItem?.year}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </>
+              )}
 
               <div className="w-full md:w-1/3">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -363,7 +374,7 @@ const UpdateExecutives = ({
                     <select
                       id="roleSelect"
                       name="role"
-                      defaultValue={getsingleExecutiveData.role}
+                      defaultValue={getsingleExecutiveData?.role}
                       className="mt-1 p-3 block w-full rounded-md focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
                     >
                       <option className="text-black" value="">

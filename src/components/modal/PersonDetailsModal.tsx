@@ -67,15 +67,17 @@ export default function AnimeCardModal({
             />
 
             {/* Content Container */}
-            <div className="relative z-10 p-4 sm:p-6 md:p-8">
+            <div className="relative z-10 h-[450px] p-4 sm:p-6 md:p-8">
               <div className="flex flex-col md:flex-row gap-6">
                 {/* Left Side */}
-                <div className="flex flex-col space-y-4 md:space-y-6 w-full md:w-1/2">
-                  <div>
-                    <div className="inline-block rounded-lg bg-purple-500/20 px-3 py-1 text-sm text-purple-300">
-                      {executiveData?.communitySession}
+                <div className="flex flex-col justify-between space-y-4 md:space-y-6 w-full md:w-1/2">
+                  {executiveData?.communitySession !== "N/A" && (
+                    <div>
+                      <div className="inline-block rounded-lg bg-purple-500/20 px-3 py-1 text-sm text-purple-300">
+                        {executiveData?.communitySession}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   <div className="space-y-1">
                     <h2 className="text-xl sm:text-2xl font-bold text-white">
@@ -87,14 +89,16 @@ export default function AnimeCardModal({
                   </div>
 
                   <div className="space-y-3">
-                    <div>
-                      <p className="text-xs sm:text-sm text-purple-300">
-                        Session
-                      </p>
-                      <p className="text-white text-sm sm:text-base">
-                        {executiveData?.session}
-                      </p>
-                    </div>
+                    {executiveData?.session !== "N/A" && (
+                      <div>
+                        <p className="text-xs sm:text-sm text-purple-300">
+                          Session
+                        </p>
+                        <p className="text-white text-sm sm:text-base">
+                          {executiveData?.session}
+                        </p>
+                      </div>
+                    )}
 
                     <div>
                       <p className="text-xs sm:text-sm text-purple-300">
@@ -149,11 +153,11 @@ export default function AnimeCardModal({
                 </div>
 
                 {/* Right Side - Image */}
-                <div className="md:absolute md:right-0 md:bottom-0 flex-shrink-0 w-full md:w-1/2 h-64 md:h-[400px] flex items-center justify-center">
+                <div className="md:absolute bottom- md:right-0 md:top-0 flex-shrink-0 w-full md:w-1/2 flex items-center justify-center">
                   <img
                     src={executiveData?.profileImage}
                     alt={executiveData?.fullName || "Executive"}
-                    className="h-full w-auto object-contain"
+                    className="max-h-[calc(100vh-5rem)] w-auto object-contain"
                   />
                 </div>
               </div>

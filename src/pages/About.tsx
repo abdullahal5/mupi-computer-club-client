@@ -21,10 +21,10 @@ const About = () => {
             unlock new skills and inspire creativity.
           </p>
 
-          <div className="grid grid-cols-3 gap-4 sm:gap-8 pt-6">
+          <div className="flex items-center justify-between gap-4 sm:gap-8 pt-6">
             <div className="flex items-start gap-2 sm:gap-3">
               <span className="text-2xl sm:text-3xl md:text-4xl font-bold">
-                04
+                03
               </span>
               <p className="text-xs sm:text-sm">
                 Student <br /> Teams
@@ -32,7 +32,7 @@ const About = () => {
             </div>
             <div className="flex items-start gap-2 sm:gap-3">
               <span className="text-2xl sm:text-3xl md:text-4xl font-bold">
-                272
+                550+
               </span>
               <p className="text-xs sm:text-sm">
                 Total <br /> Members
@@ -40,7 +40,7 @@ const About = () => {
             </div>
             <div className="flex items-start gap-2 sm:gap-3">
               <span className="text-2xl sm:text-3xl md:text-4xl font-bold">
-                03
+                7+
               </span>
               <p className="text-xs sm:text-sm">
                 Month of <br /> Journey
