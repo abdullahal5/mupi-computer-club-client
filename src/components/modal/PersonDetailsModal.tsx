@@ -67,10 +67,10 @@ export default function AnimeCardModal({
             />
 
             {/* Content Container */}
-            <div className="relative z-10 h-[450px] p-4 sm:p-6 md:p-8">
-              <div className="flex flex-col md:flex-row gap-6">
+            <div className="relative flex items-center justify-center z-10 min-h-[450px] p-4 sm:p-6 md:p-8">
+              <div className="flex flex-col-reverse md:flex-row gap-6 h-full">
                 {/* Left Side */}
-                <div className="flex flex-col justify-between space-y-4 md:space-y-6 w-full md:w-1/2">
+                <div className="flex w-full md:w-1/2 flex-col justify-center space-y-4 md:space-y-6">
                   {executiveData?.communitySession !== "N/A" && (
                     <div>
                       <div className="inline-block rounded-lg bg-purple-500/20 px-3 py-1 text-sm text-purple-300">
@@ -153,11 +153,11 @@ export default function AnimeCardModal({
                 </div>
 
                 {/* Right Side - Image */}
-                <div className="md:absolute bottom- md:right-0 md:top-0 flex-shrink-0 w-full md:w-1/2 flex items-center justify-center">
+                <div className="flex w-full md:w-1/2 items-center justify-center">
                   <img
                     src={executiveData?.profileImage}
                     alt={executiveData?.fullName || "Executive"}
-                    className="max-h-[calc(100vh-5rem)] w-auto object-contain"
+                    className="lg:max-h-[calc(100vh-5rem)] md:max-h-[calc(100vh-5rem)] h-auto w-auto object-contain"
                   />
                 </div>
               </div>

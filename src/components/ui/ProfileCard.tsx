@@ -12,7 +12,7 @@ export function ProfileCard({
   return (
     <div
       onClick={handleOpen}
-      className="bg-[#17163A] p-6 rounded-xl w-full hover:bg-[#1d1b47] transition-all duration-300 group"
+      className="bg-[#17163A] cursor-pointer p-6 rounded-xl w-full hover:bg-[#1d1b47] transition-all duration-300 group"
     >
       <div className="flex flex-col items-center gap-4">
         <div className="w-20 h-20 rounded-full overflow-hidden ring-4 ring-blue-500/20 group-hover:ring-blue-500/40 transition-all duration-300">
