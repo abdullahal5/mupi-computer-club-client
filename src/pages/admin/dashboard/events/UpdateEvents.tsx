@@ -113,8 +113,7 @@ const UpdateEvents = ({ onClose, id }: { onClose: () => void; id: string }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-        const toastId = toast.loading("Loading");
-
+    const toastId = toast.loading("Loading");
 
     const target = e.target as any;
 

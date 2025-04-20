@@ -107,7 +107,7 @@ const UpdateExecutives = ({
     const linkedin = target.linkedin.value || "N/A";
     const twitter = target.twitter.value || "N/A";
 
-    if (role !== "advisor") {
+    if (role !== "advisor" && role !== "mentor") {
       const regex = /^(\d{4})-(\d{4})$/;
       const match = session.match(regex);
 
@@ -141,7 +141,8 @@ const UpdateExecutives = ({
         contact,
         role,
         session,
-        communitySession: role === "advisor" ? "N/A" : communitySession,
+        communitySession:
+          role === "advisor" || role === "mentor" ? "N/A" : communitySession,
         roleType,
         position: roleType === "developer" ? position : "N/A",
         facebook,
@@ -153,7 +154,7 @@ const UpdateExecutives = ({
     if (res.error) {
       toast.error(res.error.data.message, {
         duration: 2000,
-        id: toastId
+        id: toastId,
       });
 
       onClose();

@@ -64,7 +64,6 @@ const SessionModal = ({ isOpen, onClose, id }: sessionModalProps) => {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                console.log("Close button clicked");
                 onClose();
               }}
               className="absolute z-50 right-3 top-3 bg-black/20 p-2 rounded-full hover:bg-black/30 transition-colors duration-300"

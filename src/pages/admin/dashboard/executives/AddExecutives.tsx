@@ -77,7 +77,7 @@ const AddExecutives = ({ onClose }: { onClose: () => void }) => {
     const linkedin = target.linkedin.value || "N/A";
     const twitter = target.twitter.value || "N/A";
 
-    if (role !== "advisor") {
+    if (role !== "advisor" && role !== "mentor") {
       const regex = /^(\d{4})-(\d{4})$/;
       const match = session.match(regex);
 
@@ -109,7 +109,8 @@ const AddExecutives = ({ onClose }: { onClose: () => void }) => {
       contact,
       role,
       session,
-      communitySession: role === "advisor" ? "N/A" : communitySession,
+      communitySession:
+        role === "advisor" || role === "mentor" ? "N/A" : communitySession,
       roleType,
       facebook,
       linkedin,
@@ -133,8 +134,6 @@ const AddExecutives = ({ onClose }: { onClose: () => void }) => {
       router("/admin/dashboard/executives");
     }
   };
-
-  console.log(roleType);
 
   return (
     <div className="max-w-4xl mx-auto overflow-hidden">
