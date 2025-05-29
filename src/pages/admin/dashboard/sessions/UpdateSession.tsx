@@ -508,7 +508,6 @@ const UpdateSession = ({
               </label>
               <div className="flex flex-wrap gap-2 md:gap-4 mt-2">
                 {sponsorLogos?.map((logo, index) => {
-                  console.log(logo);
                   return (
                     <div
                       key={index}

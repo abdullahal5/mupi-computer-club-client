@@ -23,8 +23,6 @@ const ArticleCard = ({ article, index }: { article: IArticle, index: number }) =
       });
   };
 
-  console.log(index);
-
   return (
     <Link to={`/articles/${article?._id}`} className="group">
       <div className="lg:min-w-[40rem] md:min-w-[40rem] w-full h-auto bg-[#17163A] border border-gray-800 hover:border-blue-500/30 rounded-xl p-4 text-white my-4 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10">
