@@ -19,7 +19,7 @@ const Sessions = () => {
         ) : getAllSessionData?.length ? (
           getAllSessionData.map((session, index) => (
             <div key={index}>
-              <SessionCard session={session} />
+              <SessionCard index={index} session={session} />
             </div>
           ))
         ) : (

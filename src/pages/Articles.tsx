@@ -16,7 +16,7 @@ const Articles = () => {
           <Loading />
         ) : getAllArticleData?.length ? (
           getAllArticleData.map((article: IArticle, index) => (
-            <ArticleCard key={index} article={article} />
+            <ArticleCard index={index} key={index} article={article} />
           ))
         ) : (
           <NotAvailableMessage message="No Article Available" />

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { IArticle } from "../../types";
 import { formatDate } from "../../utils/formatDate";
 
-const ArticleCard = ({ article }: { article: IArticle }) => {
+const ArticleCard = ({ article, index }: { article: IArticle, index: number }) => {
   const [copied, setCopied] = useState(false);
 
   const handleShare = (e: React.MouseEvent) => {
@@ -23,6 +23,8 @@ const ArticleCard = ({ article }: { article: IArticle }) => {
       });
   };
 
+  console.log(index);
+
   return (
     <Link to={`/articles/${article?._id}`} className="group">
       <div className="lg:min-w-[40rem] md:min-w-[40rem] w-full h-auto bg-[#17163A] border border-gray-800 hover:border-blue-500/30 rounded-xl p-4 text-white my-4 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10">
@@ -33,9 +35,11 @@ const ArticleCard = ({ article }: { article: IArticle }) => {
               <span className="text-gray-400 text-xs sm:text-sm">
                 {formatDate(article?.createdAt)}
               </span>
-              <span className="px-2 py-0.5 text-xs bg-blue-500/20 text-blue-300 rounded-full">
-                Latest
-              </span>
+              {index === 0 && (
+                <span className="px-2 py-0.5 text-xs bg-blue-500/20 text-blue-300 rounded-full">
+                  Latest
+                </span>
+              )}
             </div>
 
             <h2 className="text-lg sm:text-xl font-semibold text-blue-400 group-hover:text-blue-300 transition-colors duration-300">

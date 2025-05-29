@@ -7,7 +7,13 @@ import { formatDate } from "../../utils/formatDate";
 import SessionModal from "../modal/SessionModal";
 import { useNavigate } from "react-router-dom";
 
-const SessionCard = ({ session }: { session: ISession }) => {
+const SessionCard = ({
+  session,
+  index,
+}: {
+  session: ISession;
+  index: number;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [singleSessionId, setSingleSessionId] = useState<string>("");
   const [copied, setCopied] = useState(false);
@@ -48,17 +54,17 @@ const SessionCard = ({ session }: { session: ISession }) => {
   };
 
   useEffect(() => {
-      const params = new URLSearchParams(location.search);
-      const eventIdFromUrl = params.get("eventId");
-  
-      if (eventIdFromUrl) {
-        setIsOpen(true);
-        setSingleSessionId(eventIdFromUrl);
-      } else if (isOpen) {
-        setIsOpen(false);
-        setSingleSessionId("");
-      }
-    }, [location.search]);
+    const params = new URLSearchParams(location.search);
+    const eventIdFromUrl = params.get("eventId");
+
+    if (eventIdFromUrl) {
+      setIsOpen(true);
+      setSingleSessionId(eventIdFromUrl);
+    } else if (isOpen) {
+      setIsOpen(false);
+      setSingleSessionId("");
+    }
+  }, [location.search]);
 
   return (
     <div
@@ -71,18 +77,21 @@ const SessionCard = ({ session }: { session: ISession }) => {
             <span className="text-gray-400 text-xs">
               {formatDate(session?.createdAt)}
             </span>
-            <span className="px-2 py-0.5 text-xs bg-blue-500/20 text-blue-300 rounded-full">
-              Latest
-            </span>
+            {index === 0 && (
+              <span className="px-2 py-0.5 text-xs bg-blue-500/20 text-blue-300 rounded-full">
+                Latest
+              </span>
+            )}
           </div>
 
           <h2 className="text-lg md:text-xl font-medium text-blue-400 hover:text-blue-300 transition-colors mb-1 md:mb-2">
             {session?.title}
           </h2>
 
-          <p className="text-xs md:text-sm text-gray-400 mb-3 md:mb-4 line-clamp-2">
-            {session?.description}
-          </p>
+          <div
+            dangerouslySetInnerHTML={{ __html: session?.description }}
+            className="text-xs md:text-sm text-gray-400 mb-3 md:mb-4 line-clamp-2"
+          />
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-xs md:text-sm text-gray-300">

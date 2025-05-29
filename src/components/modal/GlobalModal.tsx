@@ -23,10 +23,7 @@ const GlobalModal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
   return (
-    <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div
         className="bg-[#1a1b35] h-[80vh] overflow-y-auto scrollbar-thin p-6 rounded-lg shadow-lg max-w-4xl w-full relative"
         onClick={(e) => e.stopPropagation()}

@@ -11,6 +11,8 @@ import { IEvent, TResponse } from "../../../../types";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { FaPlus, FaTrash } from "react-icons/fa6";
 import Loading from "../../../../components/ui/Loading";
+import ReactQuill from "react-quill";
+import { formats, modulesWithoutImage } from "../../../../shared";
 
 const convertTo24HourFormat = (time: string): string => {
   if (!time) return "";
@@ -29,6 +31,8 @@ const convertTo24HourFormat = (time: string): string => {
 
 const UpdateEvents = ({ onClose, id }: { onClose: () => void; id: string }) => {
   const [updateEvent] = useUpdateEventMutation();
+  const [sponsorLogos, setSponsorLogos] = useState<string[]>([]);
+  const [value, setValue] = useState("");
   const router = useNavigate();
   const {
     data: getSingleEventInfo,
@@ -49,8 +53,11 @@ const UpdateEvents = ({ onClose, id }: { onClose: () => void; id: string }) => {
     if (eventData) {
       setEligibilityCriteria(eventData.eligibilityCriteria || []);
       setImages(eventData.images || []);
+      setSponsorLogos(eventData?.sponsorLogos || []);
+      setValue(eventData.description || "");
     }
   }, [eventData]);
+
 
   const addField = (setter: React.Dispatch<React.SetStateAction<string[]>>) => {
     setter((prev) => [...prev, ""]);
@@ -110,6 +117,45 @@ const UpdateEvents = ({ onClose, id }: { onClose: () => void; id: string }) => {
     }
   };
 
+  const handleSponsorLogoUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    const loadingToast = toast.loading("Uploading sponsor logos...");
+
+    try {
+      const uploadPromises = Array.from(files).map(async (file) => {
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const response = await fetch(
+          "https://api.imgbb.com/1/upload?key=32759f60f432e8e5c388e20a2da70600",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const result = await response.json();
+        if (result.success) {
+          return result.data.url;
+        } else {
+          throw new Error("Upload failed");
+        }
+      });
+
+      const uploadedLogos = await Promise.all(uploadPromises);
+      setSponsorLogos((prev) => [...prev, ...uploadedLogos]);
+      toast.success("Sponsor logos uploaded successfully!", {
+        id: loadingToast,
+      });
+    } catch (error) {
+      toast.error("Error uploading sponsor logos!", { id: loadingToast });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -123,7 +169,7 @@ const UpdateEvents = ({ onClose, id }: { onClose: () => void; id: string }) => {
     const date = target.date.value;
     let startTime = target.startTime.value;
     let endTime = target.endTime.value;
-    const description = target.description.value;
+    const description = value;
     const location = target.location.value;
 
     const convertTo12HourFormat = (time: string) => {
@@ -155,6 +201,7 @@ const UpdateEvents = ({ onClose, id }: { onClose: () => void; id: string }) => {
         status,
         date,
         description,
+        sponsorLogos,
         location,
         startTime,
         endTime,
@@ -179,6 +226,7 @@ const UpdateEvents = ({ onClose, id }: { onClose: () => void; id: string }) => {
       router("/admin/dashboard/events");
     }
   };
+
   return (
     <div className="px-4 sm:px-6 md:px-8 py-6">
       {isLoading || isFetching ? (
@@ -376,15 +424,15 @@ const UpdateEvents = ({ onClose, id }: { onClose: () => void; id: string }) => {
               >
                 Description
               </label>
-              <textarea
-                id="description"
-                name="description"
+              <ReactQuill
+                className="mt-3 rounded-md text-white"
+                formats={formats}
+                modules={modulesWithoutImage}
+                theme="snow"
+                value={value}
                 defaultValue={eventData?.description}
-                placeholder="Tell us more about this event."
-                rows={4}
-                className="mt-1 p-2 md:p-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
-                required
-              ></textarea>
+                onChange={setValue}
+              />
             </div>
 
             <div>
@@ -424,6 +472,54 @@ const UpdateEvents = ({ onClose, id }: { onClose: () => void; id: string }) => {
               >
                 <FaPlus className="mr-2" /> Add Criterion
               </button>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Sponsor Logos
+              </label>
+              <div className="flex flex-wrap gap-2 md:gap-4 mt-2">
+                {sponsorLogos?.map((logo, index) => (
+                  <div
+                    key={index}
+                    className="relative w-16 h-16 md:w-24 md:h-24"
+                  >
+                    <img
+                      src={logo}
+                      alt={`Sponsor Logo ${index}`}
+                      className="w-full h-full object-contain rounded-md"
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setSponsorLogos(
+                          sponsorLogos.filter((_, i) => i !== index)
+                        )
+                      }
+                      className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full text-xs"
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
+                ))}
+                <label
+                  htmlFor="sponsor-logo-upload"
+                  className="flex items-center justify-center w-16 h-16 md:w-24 md:h-24 border-2 border-dashed border-gray-300 rounded-md cursor-pointer bg-white/15 hover:bg-white/25 transition"
+                >
+                  <FaCloudUploadAlt className="text-xl md:text-2xl text-[#000030]" />
+                  <input
+                    type="file"
+                    id="sponsor-logo-upload"
+                    accept="image/*"
+                    multiple
+                    onChange={handleSponsorLogoUpload}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+              <p className="text-xs text-gray-400 mt-1">
+                Upload sponsor logos (multiple allowed)
+              </p>
             </div>
 
             <div className="text-right mt-3 md:mt-4">

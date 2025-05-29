@@ -85,7 +85,6 @@ const EventCard = ({ event }: { event: IEvent }) => {
           </div>
 
           <h2 className="text-xl font-semibold text-blue-400">{event.title}</h2>
-          <p className="text-sm text-gray-400">{event.description}</p>
 
           <div className="space-y-2">
             <div className="flex items-center gap-1 text-sm text-gray-400">

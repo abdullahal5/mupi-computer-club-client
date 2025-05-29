@@ -10,6 +10,8 @@ import {
   useUpdateSessionMutation,
 } from "../../../../redux/features/sessions/sessionsApi";
 import Loading from "../../../../components/ui/Loading";
+import { formats, modulesWithoutImage } from "../../../../shared";
+import ReactQuill from "react-quill";
 
 const convertTo24HourFormat = (time: string): string => {
   if (!time) return "";
@@ -46,6 +48,8 @@ const UpdateSession = ({
   const sessionData = getSingleSessionInfo?.data as ISession;
 
   const [images, setImages] = useState<string[]>([]);
+  const [value, setValue] = useState("");
+  const [sponsorLogos, setSponsorLogos] = useState<string[]>([]);
   const [eligibilityCriteria, setEligibilityCriteria] = useState<string[]>([
     "",
   ]);
@@ -59,6 +63,8 @@ const UpdateSession = ({
     if (sessionData) {
       setEligibilityCriteria(sessionData.eligibilityCriteria || []);
       setImages(sessionData.images || []);
+      setValue(sessionData?.description || "");
+      setSponsorLogos(sessionData?.sponsorLogos || []);
     }
   }, [sessionData]);
 
@@ -116,6 +122,45 @@ const UpdateSession = ({
     }
   };
 
+  const handleSponsorLogoUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    const loadingToast = toast.loading("Uploading sponsor logos...");
+
+    try {
+      const uploadPromises = Array.from(files).map(async (file) => {
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const response = await fetch(
+          "https://api.imgbb.com/1/upload?key=32759f60f432e8e5c388e20a2da70600",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const result = await response.json();
+        if (result.success) {
+          return result.data.url;
+        } else {
+          throw new Error("Upload failed");
+        }
+      });
+
+      const uploadedLogos = await Promise.all(uploadPromises);
+      setSponsorLogos((prev) => [...prev, ...uploadedLogos]);
+      toast.success("Sponsor logos uploaded successfully!", {
+        id: loadingToast,
+      });
+    } catch (error) {
+      toast.error("Error uploading sponsor logos!", { id: loadingToast });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -129,7 +174,7 @@ const UpdateSession = ({
     const date = target.date.value;
     let startTime = target.startTime.value;
     let endTime = target.endTime.value;
-    const description = target.description.value;
+    const description = value;
     const location = target.location.value;
     const sessionLink = target.sessionLink.value;
 
@@ -163,6 +208,7 @@ const UpdateSession = ({
         date,
         description,
         location,
+        sponsorLogos,
         startTime,
         sessionLink,
         endTime,
@@ -395,7 +441,6 @@ const UpdateSession = ({
                 defaultValue={sessionData?.sessionLink}
                 placeholder="https://example.com"
                 className="mt-1 p-3 w-full rounded-md border-gray-300 shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
-                required
               />
             </div>
 
@@ -407,15 +452,14 @@ const UpdateSession = ({
               >
                 Description
               </label>
-              <textarea
-                id="description"
-                name="description"
-                defaultValue={sessionData?.description}
-                placeholder="Tell us more about this session."
-                rows={4}
-                className="mt-1 p-3 w-full rounded-md border-gray-300 shadow-sm focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
-                required
-              ></textarea>
+              <ReactQuill
+                className="mt-3 rounded-md text-white"
+                formats={formats}
+                modules={modulesWithoutImage}
+                theme="snow"
+                value={value}
+                onChange={setValue}
+              />
             </div>
 
             {/* Eligibility Criteria */}
@@ -456,6 +500,57 @@ const UpdateSession = ({
               >
                 <FaPlus className="mr-2" /> Update Criterion
               </button>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Sponsor Logos
+              </label>
+              <div className="flex flex-wrap gap-2 md:gap-4 mt-2">
+                {sponsorLogos?.map((logo, index) => {
+                  console.log(logo);
+                  return (
+                    <div
+                      key={index}
+                      className="relative w-16 h-16 md:w-24 md:h-24"
+                    >
+                      <img
+                        src={logo}
+                        alt={`Sponsor Logo ${index}`}
+                        className="w-full h-full object-contain rounded-md"
+                      />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setSponsorLogos(
+                            sponsorLogos.filter((_, i) => i !== index)
+                          )
+                        }
+                        className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full text-xs"
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  );
+                })}
+                <label
+                  htmlFor="sponsor-logo-upload"
+                  className="flex items-center justify-center w-16 h-16 md:w-24 md:h-24 border-2 border-dashed border-gray-300 rounded-md cursor-pointer bg-white/15 hover:bg-white/25 transition"
+                >
+                  <FaCloudUploadAlt className="text-xl md:text-2xl text-[#000030]" />
+                  <input
+                    type="file"
+                    id="sponsor-logo-upload"
+                    accept="image/*"
+                    multiple
+                    onChange={handleSponsorLogoUpload}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+              <p className="text-xs text-gray-400 mt-1">
+                Upload sponsor logos (multiple allowed)
+              </p>
             </div>
 
             {/* Submit Button */}

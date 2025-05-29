@@ -23,7 +23,7 @@ const LatestBlog = () => {
             getAllArticleData
               .slice(0, 2)
               .map((article: IArticle, index) => (
-                <ArticleCard key={index} article={article} />
+                <ArticleCard key={index} article={article} index={index} />
               ))
           ) : (
             <NotAvailableMessage message="No blog articles available." />

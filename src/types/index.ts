@@ -32,6 +32,7 @@ export interface IEvent {
   location: string;
   description: string;
   eligibilityCriteria: string[];
+  sponsorLogos: string[];
   createdAt: string;
   updatedAt: Date;
 }
@@ -50,6 +51,7 @@ export interface ISession {
   description: string;
   eligibilityCriteria: string[];
   createdAt: string;
+  sponsorLogos: string[];
   updatedAt: Date;
 }
 

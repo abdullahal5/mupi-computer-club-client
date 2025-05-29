@@ -8,62 +8,7 @@ import "react-quill/dist/quill.snow.css";
 import { TResponse } from "../../../../types";
 import { useAddArticleMutation } from "../../../../redux/features/article/articleApi";
 import { useNavigate } from "react-router-dom";
-
-const modules = {
-  toolbar: {
-    container: [
-      [{ header: [1, 2, false] }],
-      ["bold", "italic", "underline", "strike", "blockquote"],
-      [
-        { list: "ordered" },
-        { list: "bullet" },
-        { indent: "-1" },
-        { indent: "+1" },
-      ],
-      ["link", "image"],
-      ["clean"],
-    ],
-    handlers: {
-      image: function () {
-        const input = document.createElement("input");
-
-        input.setAttribute("type", "file");
-        input.setAttribute("accept", "image/*");
-        input.click();
-
-        input.onchange = () => {
-          const file = input?.files?.[0];
-
-          if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-              const quill = (this as any).quill;
-              const range = quill.getSelection();
-              if (range) {
-                quill.insertEmbed(range.index, "image", reader.result);
-              }
-            };
-            reader.readAsDataURL(file);
-          }
-        };
-      },
-    },
-  },
-};
-
-const formats = [
-  "header",
-  "bold",
-  "italic",
-  "underline",
-  "strike",
-  "blockquote",
-  "list",
-  "bullet",
-  "indent",
-  "link",
-  "image",
-];
+import { formats, modules } from "../../../../shared";
 
 const AddArticles = ({ onClose }: { onClose: () => void }) => {
   const [image, setImages] = useState<string>();
