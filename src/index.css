@@ -22,3 +22,21 @@
     background: rgba(255, 255, 255, 0.3); /* Slightly brighter on hover */
   }
 }
+
+.prose h1 {
+  @apply text-4xl font-bold mt-6 mb-4;
+}
+
+.prose h2 {
+  @apply text-3xl font-semibold mt-5 mb-3;
+}
+
+.prose h3 {
+  @apply text-2xl font-semibold mt-4 mb-2;
+}
+
+.prose h1[class*="ql-indent"],
+.prose h2[class*="ql-indent"],
+.prose h3[class*="ql-indent"] {
+  margin-left: 1.5rem;
+}

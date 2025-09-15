@@ -19,7 +19,9 @@ const Events = () => {
               <EventCard key={index} event={event} />
             ))
           ) : (
-            <NotAvailableMessage message="No events available." />
+            <div className="col-span-6">
+              <NotAvailableMessage message="No events available." />
+            </div>
           )}
         </div>
       </div>

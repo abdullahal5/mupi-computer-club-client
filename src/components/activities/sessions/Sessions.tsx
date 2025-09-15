@@ -11,7 +11,7 @@ const Sessions = () => {
   const getAllSessionData = getAllSessionInfo?.data as ISession[];
 
   return (
-    <div className="flex flex-col lg:flex-row items-start gap-6 lg:gap-10 justify-center pt-6 lg:pt-10 px-4 sm:px-6">
+    <div className="flex flex-col-reverse lg:flex-row items-start gap-6 lg:gap-10 justify-center pt-6 lg:pt-10 px-4 sm:px-6">
       {/* Sessions List - Now comes first in mobile view */}
       <div className="flex flex-col gap-4 md:gap-5 w-full lg:max-w-4xl order-2 lg:order-none">
         {isLoading ? (

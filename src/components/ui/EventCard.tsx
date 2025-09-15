@@ -55,7 +55,7 @@ const EventCard = ({ event }: { event: IEvent }) => {
 
   return (
     <>
-      <div className="lg:w-auto md:w-auto w-full rounded-xl bg-[#17163A] text-white overflow-hidden">
+      <div className="lg:w-auto md:w-auto max-w-sm rounded-xl bg-[#17163A] text-white overflow-hidden">
         <div className="relative">
           <img
             src={event.images[0]}

@@ -9,6 +9,7 @@ import {
 import { IArticle } from "../types";
 import { formatDate } from "../utils/formatDate";
 import Loading from "../components/ui/Loading";
+import "react-quill/dist/quill.snow.css";
 
 export default function ArticleDetails() {
   const { id } = useParams();
@@ -89,8 +90,8 @@ export default function ArticleDetails() {
         />
         <hr />
         <div
+          className="ql-editor prose dark:prose-invert max-w-full"
           dangerouslySetInnerHTML={{ __html: articleData?.content }}
-          className="prose dark:prose-invert max-w-full"
         />
 
         <div className="flex justify-center gap-4 mt-6">
