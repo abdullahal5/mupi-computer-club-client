@@ -72,7 +72,7 @@ export interface IExecutives {
   fullName: string;
   contact: string;
   email: string;
-  position: string;
+  rank: string;
   communitySession: string;
   session: string;
   roleType: string;

@@ -15,7 +15,11 @@ const Executives = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [singleSessionId, setSingleSessionId] = useState<string>("");
 
-  const { data: getAllExecutiveInfo, isLoading, isFetching } = useGetAllExecutivesQuery({});
+  const {
+    data: getAllExecutiveInfo,
+    isLoading,
+    isFetching,
+  } = useGetAllExecutivesQuery({});
   const getAllExecutiveData = getAllExecutiveInfo?.data as IExecutives[];
   const [deleteExecutives] = useDeleteExecutiveMutation();
 
@@ -67,6 +71,9 @@ const Executives = () => {
                     Session
                   </th>
                   <th className="px-4 py-2 border border-gray-500 text-left">
+                    Rank
+                  </th>
+                  <th className="px-4 py-2 border border-gray-500 text-left">
                     Actions
                   </th>
                 </tr>
@@ -108,6 +115,9 @@ const Executives = () => {
                           </td>
                           <td className="px-4 py-3 border border-gray-500">
                             {executive.session}
+                          </td>
+                          <td className="px-4 py-3 border border-gray-500">
+                            {executive.rank}
                           </td>
                           <td className="px-4 py-3 border border-gray-500">
                             <div className="flex gap-3">

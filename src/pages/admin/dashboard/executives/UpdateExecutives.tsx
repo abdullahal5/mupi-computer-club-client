@@ -31,7 +31,6 @@ const UpdateExecutives = ({
   const getsingleExecutiveData = getSingleExecutiveInfo?.data as IExecutives;
 
   const [roleType, setRoleType] = useState("");
-  const [position, setPosition] = useState("");
   const [image, setImage] = useState<string>("");
   const [updateExecutives] = useUpdateExecutiveMutation();
   const { data: getAllCommICommitteeInfo } =
@@ -85,7 +84,6 @@ const UpdateExecutives = ({
       setRoleType(getsingleExecutiveData?.roleType || "");
       setImage(getsingleExecutiveData?.profileImage || "");
       setCommunitySession(getsingleExecutiveData?.communitySession || "");
-      setPosition(getsingleExecutiveData?.position || "");
     }
   }, [getsingleExecutiveData]);
 
@@ -103,6 +101,7 @@ const UpdateExecutives = ({
     const roleType = target.roleType.value || "N/A";
     const role = target.role.value || "N/A";
     const session = target?.session?.value || "N/A";
+    const rank = Number(target?.rank?.value) || "N/A";
     const facebook = target.facebook.value || "N/A";
     const linkedin = target.linkedin.value || "N/A";
     const twitter = target.twitter.value || "N/A";
@@ -140,11 +139,11 @@ const UpdateExecutives = ({
         email,
         contact,
         role,
+        rank,
         session,
         communitySession:
           role === "advisor" || role === "mentor" ? "N/A" : communitySession,
         roleType,
-        position: roleType === "developer" ? position : "N/A",
         facebook,
         linkedin,
         twitter,
@@ -284,6 +283,7 @@ const UpdateExecutives = ({
                     </label>
                     <input
                       type="text"
+                      defaultValue={getsingleExecutiveData?.session}
                       id="session"
                       placeholder="Enter session"
                       name="session"
@@ -436,6 +436,24 @@ const UpdateExecutives = ({
                   </div>
                 )}
               </div>
+            </div>
+
+            <div className="lg:w-1/2 md:w-1/2 w-full">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Rank
+              </label>
+              <input
+                type="number"
+                id="rank"
+                defaultValue={getsingleExecutiveData?.rank}
+                placeholder="Enter rank of the member"
+                name="rank"
+                className="mt-1 p-3 block w-full rounded-md focus:border-[#000030] focus:ring focus:ring-[#000030] focus:ring-opacity-50 bg-white/15"
+                required
+              />
             </div>
 
             <div className="space-y-4">

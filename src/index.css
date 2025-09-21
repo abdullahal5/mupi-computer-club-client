@@ -40,3 +40,22 @@
 .prose h3[class*="ql-indent"] {
   margin-left: 1.5rem;
 }
+
+.prose ol {
+  list-style-type: decimal; /* show numbers */
+  padding-left: 1.5em;
+  margin: 0;
+}
+
+.prose ul {
+  list-style-type: disc; /* show bullets */
+  padding-left: 1.5em;
+  margin: 0;
+}
+
+.prose .ql-indent-1 {
+  margin-left: 1.5em;
+}
+.prose .ql-indent-2 {
+  margin-left: 3em;
+}

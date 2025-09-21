@@ -120,10 +120,10 @@ const EventModal = ({ isOpen, onClose, id }: EventModalProps) => {
               <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
                 {eventData?.title}
               </h2>
-              <div className="bg-purple-900/30 border border-purple-500/30 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 w-fit whitespace-nowrap">
+              {/* <div className="bg-purple-900/30 border border-purple-500/30 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 w-fit whitespace-nowrap">
                 <FaRegCalendarAlt className="text-purple-400" />
                 <span>{formatDate(eventData?.date)}</span>
-              </div>
+              </div> */}
             </div>
 
             {/* Main Content */}
@@ -212,7 +212,7 @@ const EventModal = ({ isOpen, onClose, id }: EventModalProps) => {
                       <div>
                         <p className="text-xs text-gray-400">Date</p>
                         <p className="text-gray-300">
-                          {formatDate(eventData?.createdAt)}
+                          {formatDate(eventData?.date)}
                         </p>
                       </div>
                     </div>
